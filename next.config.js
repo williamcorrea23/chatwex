@@ -5,15 +5,15 @@ const nextConfig = {
     domains: ['github.com', 'lh3.googleusercontent.com', 'images.unsplash.com'],
   },
   env: {
-    DEMO_USER_PASSWORD: process.env.DEMO_USER_PASSWORD,
-    FIREBASE_API_KEY: process.env.FIREBASE_API_KEY,
-    FIREBASE_AUTH_DOMAIN: process.env.FIREBASE_AUTH_DOMAIN,
-    FIREBASE_PROJECT_ID: process.env.FIREBASE_PROJECT_ID,
-    FIREBASE_STORAGE_BUCKET: process.env.FIREBASE_STORAGE_BUCKET,
-    FIREBASE_MESSAGING_SENDER_ID: process.env.FIREBASE_MESSAGING_SENDER_ID,
-    FIREBASE_APP_ID: process.env.FIREBASE_APP_ID,
-    STRIPE_PRO_MEMBERSHIP_PRODUCT_ID:
-      process.env.STRIPE_PRO_MEMBERSHIP_PRODUCT_ID,
+    DEMO_USER_PASSWORD: 'fodase24', // Substitua por uma senha segura
+  FIREBASE_API_KEY: "AIzaSyDwNC4QWaBQYqvayl98oMArcGdYV0JuqSk",
+  FIREBASE_AUTH_DOMAIN: "elearning-568mbq.firebaseapp.com",
+  FIREBASE_PROJECT_ID: "elearning-568mbq",
+  FIREBASE_STORAGE_BUCKET: "elearning-568mbq.appspot.com",
+  FIREBASE_MESSAGING_SENDER_ID: "956581108104",
+  FIREBASE_APP_ID: "1:956581108104:web:2be9a9b0c5978cd4b3823d",
+  FIREBASE_MEASUREMENT_ID: "G-WLB4FBXE9R",
+    STRIPE_PRO_MEMBERSHIP_PRODUCT_ID: "prod_QSXdaODLiJU66u",
   },
 }
 

@@ -8,7 +8,7 @@ let app
     credential: admin.credential.cert({
       projectId: "elearning-568mbq",
       clientEmail: "firebase-adminsdk-ufs3h@elearning-568mbq.iam.gserviceaccount.com",
-      privateKey: process.env.FIREBASE_PRIVATE_KEY?.replace(/\\n/g, '\n'),
+      privateKey: "76551a5cea1b20db844eefb235750a8c0dff8683", //process.env.FIREBASE_PRIVATE_KEY?.replace(/\\n/g, '\n'),
     }),
   })
 }
@@ -17,7 +17,7 @@ const adminDB = initFirestore({
   credential: admin.credential.cert({
  projectId: "elearning-568mbq",
     clientEmail: "firebase-adminsdk-ufs3h@elearning-568mbq.iam.gserviceaccount.com",
-    privateKey: process.env.FIREBASE_PRIVATE_KEY?.replace(/\\n/g, '\n'),
+    privateKey: "76551a5cea1b20db844eefb235750a8c0dff8683",//process.env.FIREBASE_PRIVATE_KEY?.replace(/\\n/g, '\n'),
   }),
 })
 

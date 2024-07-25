@@ -9,7 +9,7 @@ import ChatMessages from '@/components/ChatMessages'
 import { sortedMessagesRef } from '@/lib/converters/Message'
 import { chatMembersRef } from '@/lib/converters/ChatMembers'
 import { authOptions } from '@/auth'
-import { ensureCollectionExists } from '@/utils/firestoreUtils'
+import { ensureCollectionExistsRef } from '@/lib/converters/ensureCollectionExists'
 
 type Props = { params: { chatId: string } }
 
@@ -18,8 +18,8 @@ async function ChatPage({ params: { chatId } }: Props) {
   if (!session?.user) redirect('/api/auth/signin')
 
   // Garantindo que as coleções existam
-  await ensureCollectionExists(db, `chats/${chatId}/messages`)
-  await ensureCollectionExists(db, `chats/${chatId}/members`)
+  await ensureCollectionExistsRef(db, `chats/${chatId}/messages`)
+  await ensureCollectionExistsRef(db, `chats/${chatId}/members`)
 
   const messages = await getDocs(sortedMessagesRef(chatId))
   const members = await getDocs(chatMembersRef(chatId))

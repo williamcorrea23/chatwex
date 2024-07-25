@@ -15,10 +15,19 @@ type Props = { params: { chatId: string } }
 
 async function ChatPage({ params: { chatId } }: Props) {
   const session = await getServerSession(authOptions)
+    console.log('Session:', session);
+  if (!session) {
+    redirect('/login'); 
+    return null;
+  }
+  
   const initialMessages = (await getDocs(sortedMessagesRef(chatId))).docs.map(
     doc => doc.data()
   )
 
+    const chatMembers = (await getDocs(chatMembersRef(chatId))).docs.map(doc => doc.id)
+  console.log('Chat Members:', chatMembers);
+  
   const hasAccess = (await getDocs(chatMembersRef(chatId))).docs
     .map(doc => doc.id)
     .includes(session?.user.id!)

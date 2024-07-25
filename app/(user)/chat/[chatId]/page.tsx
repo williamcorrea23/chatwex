@@ -1,6 +1,6 @@
 import { redirect } from 'next/navigation'
 import { getServerSession } from 'next-auth'
-import { getDocs } from 'firebase/firestore'
+import { getDocs, setDoc, doc, collection, getFirestore } from 'firebase/firestore'
 
 import AdminControls from '@/components/AdminControls'
 import ChatInput from '@/components/ChatInput'
@@ -9,20 +9,43 @@ import ChatMessages from '@/components/ChatMessages'
 import { sortedMessagesRef } from '@/lib/converters/Message'
 import { chatMembersRef } from '@/lib/converters/ChatMembers'
 import { authOptions } from '@/auth'
-import { ensureCollectionExistsRef } from '@/lib/converters/ensureCollectionExists'
 
 type Props = { params: { chatId: string } }
 
+async function ensureCollectionExists(collectionRef) {
+  const querySnapshot = await getDocs(collectionRef)
+  if (querySnapshot.empty) {
+    console.log(`Collection ${collectionRef.id} does not exist. Creating...`)
+    // Creating a dummy document to ensure the collection exists
+    await setDoc(doc(collectionRef, 'dummy-doc'), { exists: true })
+  }
+}
+
 async function ChatPage({ params: { chatId } }: Props) {
   const session = await getServerSession(authOptions)
-  if (!session?.user) redirect('/api/auth/signin')
+  if (!session) {
+    console.error('Session is undefined')
+    redirect('/login')
+    return null
+  }
 
-  // Garantindo que as coleções existam
-  await ensureCollectionExistsRef(db, `chats/${chatId}/messages`)
-  await ensureCollectionExistsRef(db, `chats/${chatId}/members`)
+  const db = getFirestore()
+  const messagesCollectionRef = sortedMessagesRef(chatId)
+  const membersCollectionRef = chatMembersRef(chatId)
 
-  const messages = await getDocs(sortedMessagesRef(chatId))
-  const members = await getDocs(chatMembersRef(chatId))
+  // Ensure the collections exist
+  await ensureCollectionExists(messagesCollectionRef)
+  await ensureCollectionExists(membersCollectionRef)
+
+  const initialMessages = (await getDocs(messagesCollectionRef)).docs.map(
+    doc => doc.data()
+  )
+
+  const hasAccess = (await getDocs(membersCollectionRef)).docs
+    .map(doc => doc.id)
+    .includes(session.user.id!)
+  if (!hasAccess) redirect('/chat?error=permission')
+
   return (
     <>
       <AdminControls chatId={chatId} />

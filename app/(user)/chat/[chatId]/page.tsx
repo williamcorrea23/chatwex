@@ -9,10 +9,11 @@ import ChatMessages from '@/components/ChatMessages'
 import { sortedMessagesRef } from '@/lib/converters/Message'
 import { chatMembersRef } from '@/lib/converters/ChatMembers'
 import { authOptions } from '@/auth'
+import { CollectionReference } from 'firebase/firestore'
 
 type Props = { params: { chatId: string } }
 
-async function ensureCollectionExists(collectionRef) {
+async function ensureCollectionExists(collectionRef: CollectionReference) {
   const querySnapshot = await getDocs(collectionRef)
   if (querySnapshot.empty) {
     console.log(`Collection ${collectionRef.id} does not exist. Creating...`)

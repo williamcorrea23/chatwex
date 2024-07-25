@@ -9,33 +9,20 @@ import ChatMessages from '@/components/ChatMessages'
 import { sortedMessagesRef } from '@/lib/converters/Message'
 import { chatMembersRef } from '@/lib/converters/ChatMembers'
 import { authOptions } from '@/auth'
+import { ensureCollectionExists } from '@/utils/firestoreUtils'
 
 type Props = { params: { chatId: string } }
 
 async function ChatPage({ params: { chatId } }: Props) {
-  console.log('Fetching session...');
   const session = await getServerSession(authOptions)
-  console.log('Session:', session);
-  if (!session) {
-    redirect('/login'); // Ou qualquer página de login/erro
-    return null;
-  }
+  if (!session?.user) redirect('/api/auth/signin')
 
-  console.log('Fetching initial messages...');
-  const initialMessages = (await getDocs(sortedMessagesRef(chatId))).docs.map(
-    doc => doc.data()
-  )
-  console.log('Initial Messages:', initialMessages);
+  // Garantindo que as coleções existam
+  await ensureCollectionExists(db, `chats/${chatId}/messages`)
+  await ensureCollectionExists(db, `chats/${chatId}/members`)
 
-  console.log('Fetching chat members...');
-  const chatMembers = (await getDocs(chatMembersRef(chatId))).docs.map(doc => doc.id)
-  console.log('Chat Members:', chatMembers);
-  const hasAccess = chatMembers.includes(session?.user.id!)
-  if (!hasAccess) {
-    redirect('/chat?error=permission')
-    return null;
-  }
-
+  const messages = await getDocs(sortedMessagesRef(chatId))
+  const members = await getDocs(chatMembersRef(chatId))
   return (
     <>
       <AdminControls chatId={chatId} />

@@ -9,6 +9,7 @@ import ChatMessages from '@/components/ChatMessages'
 import { sortedMessagesRef } from '@/lib/converters/Message'
 import { chatMembersRef } from '@/lib/converters/ChatMembers'
 import { authOptions } from '@/auth'
+import { CollectionReference } from '@/lib/converters/ensureCollectionExists'
 
 type Props = { params: { chatId: string } }
 
@@ -34,9 +35,12 @@ async function ChatPage({ params: { chatId } }: Props) {
   const membersCollectionRef = chatMembersRef(chatId)
 
   // Ensure the collections exist
+  try {
   await ensureCollectionExists(messagesCollectionRef)
   await ensureCollectionExists(membersCollectionRef)
-
+} catch (error) {
+  console.error('Error ensuring collections exist:', error);
+}
   const initialMessages = (await getDocs(messagesCollectionRef)).docs.map(
     doc => doc.data()
   )

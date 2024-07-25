@@ -30,7 +30,7 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 
 const adminDB= admin.firestore();
-const adminAuth= admin.auth(app);
+const adminAuth= admin.auth();
 
 
 export { adminDB, adminAuth }

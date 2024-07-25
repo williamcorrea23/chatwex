@@ -7,31 +7,34 @@ import ChatInput from '@/components/ChatInput'
 import ChatMembersBadges from '@/components/ChatMembersBadges'
 import ChatMessages from '@/components/ChatMessages'
 import { sortedMessagesRef } from '@/lib/converters/Message'
-
 import { chatMembersRef } from '@/lib/converters/ChatMembers'
 import { authOptions } from '@/auth'
 
 type Props = { params: { chatId: string } }
 
 async function ChatPage({ params: { chatId } }: Props) {
+  console.log('Fetching session...');
   const session = await getServerSession(authOptions)
-    console.log('Session:', session);
+  console.log('Session:', session);
   if (!session) {
-    redirect('/login'); 
+    redirect('/login'); // Ou qualquer página de login/erro
     return null;
   }
-  
+
+  console.log('Fetching initial messages...');
   const initialMessages = (await getDocs(sortedMessagesRef(chatId))).docs.map(
     doc => doc.data()
   )
+  console.log('Initial Messages:', initialMessages);
 
-    const chatMembers = (await getDocs(chatMembersRef(chatId))).docs.map(doc => doc.id)
+  console.log('Fetching chat members...');
+  const chatMembers = (await getDocs(chatMembersRef(chatId))).docs.map(doc => doc.id)
   console.log('Chat Members:', chatMembers);
-  
-  const hasAccess = (await getDocs(chatMembersRef(chatId))).docs
-    .map(doc => doc.id)
-    .includes(session?.user.id!)
-  if (!hasAccess) redirect('/chat?error=permission')
+  const hasAccess = chatMembers.includes(session?.user.id!)
+  if (!hasAccess) {
+    redirect('/chat?error=permission')
+    return null;
+  }
 
   return (
     <>

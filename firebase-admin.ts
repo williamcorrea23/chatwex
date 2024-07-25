@@ -1,26 +1,21 @@
-import admin from 'firebase-admin'
-import { initFirestore } from '@auth/firebase-adapter'
+import { firebaseConfig, production } from "./cresential";
 
-let app
+var admin = require("firebase-admin");
+import {getAuth} from "firebase/auth"
 
-  if (!admin.apps.length) {
-  app = admin.initializeApp({
-    credential: admin.credential.cert({
-      projectId: "elearning-568mbq",
-      clientEmail: "firebase-adminsdk-ufs3h@elearning-568mbq.iam.gserviceaccount.com",
-      privateKey: "76551a5cea1b20db844eefb235750a8c0dff8683", //process.env.FIREBASE_PRIVATE_KEY?.replace(/\\n/g, '\n'),
-    }),
-  })
-}
+import { initializeApp } from "firebase/app";
 
-const adminDB = initFirestore({
-  credential: admin.credential.cert({
- projectId: "elearning-568mbq",
-    clientEmail: "firebase-adminsdk-ufs3h@elearning-568mbq.iam.gserviceaccount.com",
-    privateKey: "76551a5cea1b20db844eefb235750a8c0dff8683",//process.env.FIREBASE_PRIVATE_KEY?.replace(/\\n/g, '\n'),
-  }),
-})
 
-const adminAuth = admin.auth(app)
+admin.initializeApp({
+  credential: admin.credential.cert(production)
+});
+
+const app = initializeApp(firebaseConfig);
+
+const auth = getAuth(app);
+
+const adminDB= admin.firestore();
+const adminAuth= admin.auth();
+
 
 export { adminDB, adminAuth }

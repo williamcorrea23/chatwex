@@ -1,8 +1,6 @@
 
 var admin = require("firebase-admin");
-import {getAuth} from "firebase/auth"
-
-import { initializeApp } from "firebase/app";
+	import { initializeApp } from "firebase/app";
 
 const  production  ={
     projectId:"elearning-568mbq",
@@ -11,23 +9,10 @@ const  production  ={
 } 
 
 
-const firebaseConfig = {
-  apiKey: "AIzaSyDwNC4QWaBQYqvayl98oMArcGdYV0JuqSk",
-  authDomain: "elearning-568mbq.firebaseapp.com",
-  projectId: "elearning-568mbq",
-  storageBucket: "elearning-568mbq.appspot.com",
-  messagingSenderId: "956581108104",
-  appId: "1:956581108104:web:2be9a9b0c5978cd4b3823d",
-  measurementId: "G-WLB4FBXE9R"
-};
 
 admin.initializeApp({
   credential: admin.credential.cert(production)
 });
-
-const app = initializeApp(firebaseConfig);
-
-const auth = getAuth(app);
 
 const adminDB= admin.firestore();
 const adminAuth= admin.auth();

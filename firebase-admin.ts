@@ -12,7 +12,7 @@ const  production  ={
 
 
 const firebaseConfig = {
-  apiKey: ""AIzaSyDwNC4QWaBQYqvayl98oMArcGdYV0JuqSk",
+  apiKey: "AIzaSyDwNC4QWaBQYqvayl98oMArcGdYV0JuqSk",
   authDomain: "elearning-568mbq.firebaseapp.com",
   projectId: "elearning-568mbq",
   storageBucket: "elearning-568mbq.appspot.com",

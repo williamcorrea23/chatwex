@@ -9,7 +9,6 @@ import ChatMessages from '@/components/ChatMessages'
 import { sortedMessagesRef } from '@/lib/converters/Message'
 import { chatMembersRef } from '@/lib/converters/ChatMembers'
 import { authOptions } from '@/auth'
-import { CollectionReference } from '@/lib/converters/ensureCollectionExists'
 
 type Props = { params: { chatId: string } }
 
@@ -17,7 +16,6 @@ async function ensureCollectionExists(collectionRef) {
   const querySnapshot = await getDocs(collectionRef)
   if (querySnapshot.empty) {
     console.log(`Collection ${collectionRef.id} does not exist. Creating...`)
-    // Creating a dummy document to ensure the collection exists
     await setDoc(doc(collectionRef, 'dummy-doc'), { exists: true })
   }
 }
@@ -27,7 +25,7 @@ async function ChatPage({ params: { chatId } }: Props) {
   if (!session) {
     console.error('Session is undefined')
     redirect('/login')
-    return null
+    return
   }
 
   const db = getFirestore()
@@ -36,11 +34,12 @@ async function ChatPage({ params: { chatId } }: Props) {
 
   // Ensure the collections exist
   try {
-  await ensureCollectionExists(messagesCollectionRef)
-  await ensureCollectionExists(membersCollectionRef)
-} catch (error) {
-  console.error('Error ensuring collections exist:', error);
-}
+    await ensureCollectionExists(messagesCollectionRef)
+    await ensureCollectionExists(membersCollectionRef)
+  } catch (error) {
+    console.error('Error ensuring collections exist:', error);
+  }
+
   const initialMessages = (await getDocs(messagesCollectionRef)).docs.map(
     doc => doc.data()
   )
@@ -48,7 +47,10 @@ async function ChatPage({ params: { chatId } }: Props) {
   const hasAccess = (await getDocs(membersCollectionRef)).docs
     .map(doc => doc.id)
     .includes(session.user.id!)
-  if (!hasAccess) redirect('/chat?error=permission')
+
+  if (!hasAccess) {
+    redirect('/chat?error=permission')
+  }
 
   return (
     <>

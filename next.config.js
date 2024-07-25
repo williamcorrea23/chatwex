@@ -1,6 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  experimental: { serverActions: true },
+  reactStrictMode: true,
+/**  experimental: { serverActions: true },*/
   images: {
     domains: ['github.com', 'lh3.googleusercontent.com', 'images.unsplash.com'],
   },

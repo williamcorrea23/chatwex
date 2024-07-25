@@ -9,7 +9,7 @@ export async function DELETE(req: Request) {
   const bulkWritter = adminDB.bulkWriter()
   const MAX_RETRY_ATTEMPTS = 5
 
-  bulkWritter.onWriteError(error => {
+  bulkWritter.onWriteError((error: any) => {
     if (error.failedAttempts < MAX_RETRY_ATTEMPTS) {
       return true
     } else {

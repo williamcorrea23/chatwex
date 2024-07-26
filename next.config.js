@@ -16,6 +16,15 @@ const nextConfig = {
   FIREBASE_MEASUREMENT_ID: "G-WLB4FBXE9R",
     STRIPE_PRO_MEMBERSHIP_PRODUCT_ID: "prod_QSXdaODLiJU66u",
  },
+
+  async redirects() {
+    return [
+      {
+        source: '/api/auth/callback/google',
+        destination: 'https://seu-dominio.com/api/auth/callback/google',
+        permanent: true,
+      },
+    ]},
 }
 
 module.exports = nextConfig

@@ -20,6 +20,3 @@ export const authOptions = {
   },
 }
 
-export async function handler(req, res) {
-  return NextAuth(req, res, authOptions)
-}

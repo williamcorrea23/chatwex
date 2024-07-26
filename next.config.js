@@ -15,6 +15,16 @@ const nextConfig = {
     STRIPE_PRO_MEMBERSHIP_PRODUCT_ID:
       process.env.STRIPE_PRO_MEMBERSHIP_PRODUCT_ID,
   },
+
+    async redirects() {
+    return [
+      {
+        source: '/api/auth/callback/google',
+        destination: 'https://chatwex-puce.vercel.app/api/auth/callback/google',
+        permanent: true,
+      },
+    ]
+  },
 }
 
 module.exports = nextConfig

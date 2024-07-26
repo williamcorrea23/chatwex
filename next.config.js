@@ -17,14 +17,6 @@ const nextConfig = {
     STRIPE_PRO_MEMBERSHIP_PRODUCT_ID: "prod_QSXdaODLiJU66u",
  },
 
-  async redirects() {
-    return [
-      {
-        source: '/api/auth/callback/google',
-        destination: 'https://chatwex-puce.vercel.app/api/auth/callback/google',
-        permanent: true,
-      },
-    ]},
 }
 
 module.exports = nextConfig

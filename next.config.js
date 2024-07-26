@@ -21,7 +21,7 @@ const nextConfig = {
     return [
       {
         source: '/api/auth/callback/google',
-        destination: 'https://seu-dominio.com/api/auth/callback/google',
+        destination: 'https://chatwex-puce.vercel.app/api/auth/callback/google',
         permanent: true,
       },
     ]},

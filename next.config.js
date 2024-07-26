@@ -15,7 +15,6 @@ const nextConfig = {
     STRIPE_PRO_MEMBERSHIP_PRODUCT_ID:
       process.env.STRIPE_PRO_MEMBERSHIP_PRODUCT_ID,
   },
-
 }
 
 module.exports = nextConfig

@@ -5,7 +5,6 @@ import CredentialsProvider from 'next-auth/providers/credentials'
 import { adminAuth, adminDB } from './firebase-admin'
 import { FirestoreAdapter } from '@auth/firebase-adapter'
 
-
 export const authOptions = {
   providers: [
     GoogleProvider({
@@ -31,26 +30,13 @@ export const authOptions = {
       },
     }),
   ],
+  adapter: FirestoreAdapter(adminDB),
   pages: {
-    signIn: '/auth/signin',  // Página de login personalizada, se desejar
-  },
-  callbacks: {
-    async session({ session, token }) {
-      if (session?.user) {
-        session.user.id = token.sub
-      }
-      return session
-    },
-    async jwt({ user, token }) {
-      if (user) {
-        token.sub = user.id
-      }
-      return token
-    },
+    signIn: '/auth/signin',  // Customize the sign-in page URL if needed
   },
   session: {
-    strategy: 'jwt',  // Define a estratégia de sessão para JWT
+    strategy: 'database',  // Use database session strategy
   },
-  // @ts-ignore
-  adapter: FirestoreAdapter(adminDB),
-} satisfies NextAuthOptions
+}
+
+export default NextAuth(authOptions)

@@ -10,5 +10,5 @@ export const authOptions: NextAuthOptions = {
       clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
     }),
   ],
-  adapter: FirestoreAdapter(adminDB),
+  adapter: FirestoreAdapter(adminDB) as any,
 }

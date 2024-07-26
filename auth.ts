@@ -5,8 +5,8 @@ import CredentialsProvider from 'next-auth/providers/credentials'
 import { adminAuth, adminDB } from './firebase-admin'
 import { FirestoreAdapter } from '@auth/firebase-adapter'
 
-// @ts-ignore
-export const authOptions: NextAuthOptions = {
+
+export const authOptions = {
   providers: [
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID as string,
@@ -15,37 +15,33 @@ export const authOptions: NextAuthOptions = {
     CredentialsProvider({
       name: 'Credentials',
       credentials: {
-        username: { label: 'Username', type: 'text', placeholder: 'johndoe' },
+        username: { label: 'Username', type: 'text' },
         password: { label: 'Password', type: 'password' },
       },
       async authorize(credentials) {
-        const user = {
-          id: 'demo_user_id',
-          name: 'John Doe',
-          email: 'johndoe@example.com',
-          image:
-            'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=72&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8dXNlciUyMHByb2ZpbGV8ZW58MHx8MHx8fDA%3D',
+        if (credentials?.password === process.env.DEMO_USER_PASSWORD) {
+          return {
+            id: 'demo_user_id',
+            name: 'John Doe',
+            email: 'johndoe@example.com',
+            image: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=72&auto=format&fit=crop&q=60',
+          }
         }
-
-        if (credentials?.password === process.env.DEMO_USER_PASSWORD)
-          return user
-        else return null
+        return null
       },
     }),
   ],
+  pages: {
+    signIn: '/auth/signin',  // Página de login personalizada, se desejar
+  },
   callbacks: {
-    session: async ({ session, token }) => {
+    async session({ session, token }) {
       if (session?.user) {
-        if (token.sub) {
-          session.user.id = token.sub
-
-          const firebaseToken = await adminAuth.createCustomToken(token.sub)
-          session.firebaseToken = firebaseToken
-        }
+        session.user.id = token.sub
       }
       return session
     },
-    jwt: async ({ user, token }) => {
+    async jwt({ user, token }) {
       if (user) {
         token.sub = user.id
       }
@@ -53,7 +49,7 @@ export const authOptions: NextAuthOptions = {
     },
   },
   session: {
-    strategy: 'jwt',
+    strategy: 'jwt',  // Define a estratégia de sessão para JWT
   },
   // @ts-ignore
   adapter: FirestoreAdapter(adminDB),
